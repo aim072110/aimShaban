@@ -62,7 +62,8 @@
             if(uniqueCode){
                 document.getElementById("uniqueCode").innerHTML = uniqueCode;
                 let host = get_hostname(window.location.href)
-                let qrUrl = host + '/search.html?uniqueCode='+ uniqueCode;
+                let qrUrl = 'https://aim072110.github.io/aimShaban/search.html?uniqueCode='+ uniqueCode;
+                // let qrUrl = host + '/search.html?uniqueCode='+ uniqueCode;
                 console.log(qrUrl);
                 generate(qrUrl, uniqueCode)
             }
