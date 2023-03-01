@@ -1,0 +1,129 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Aim</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="http://static.runoob.com/assets/qrcode/qrcode.min.js"></script>
+    <style>
+        .downloadlink {
+            color: white;
+            font-size: 17px;
+        }
+
+        .downloadBtn {
+            background: #11b402;
+            border: 0px;
+            border-radius: 5px;
+        }
+
+        ol li {
+            text-align: left;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body style="color:white; background:#6D326D;">
+
+    <div class="container text-center">
+        <h2>بِسْمِ اللَّـهِ الرَّحْمَـٰنِ الرَّحِيمِ</h2>
+        <h2>وصلي الله عليك يا ولي العصر ادركنا</h2>
+        <br>
+        <h3 style="line-height: 43px;margin-top: 0px;">Thank you for registering yourself
+            <br>
+            Your <u>Unique Code</u> is: <h1 style="color:#ffd000" id="uniqueCode"></h1>
+        </h3>
+        <ol>
+            <li>Please get the Unique Code at the venue.</li>
+            <li>Else download the QR code and show at the venue.</li>
+        </ol>
+
+        <div id="downloadBtnDiv"></div>
+        <h5 style="line-height: 20px;">
+            Insallah see your on 7th March, 2023 @ 8.30 PM at Masjid e Iranian (Moghul Masjid)
+            Come one
+            Come all
+            Do come with yours friends
+        </h5>
+        <div id="qrcode" style="display:none;"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            let searchParams = new URLSearchParams(window.location.search);
+            let uniqueCode = searchParams.get('uniqueCode')
+            if(uniqueCode){
+                document.getElementById("uniqueCode").innerHTML = uniqueCode;
+                let host = get_hostname(window.location.href)
+                let qrUrl = host + '/search.html?uniqueCode='+ uniqueCode;
+                console.log(qrUrl);
+                generate(qrUrl, uniqueCode)
+            }
+        });
+
+        function downloadURI(uri, name) {
+            var link = document.createElement("a");
+            link.download = name;
+            link.href = uri;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            delete link;
+        };
+
+        function get_hostname(url) {
+                var m = url.match(/^http:\/\/[^/]+/);
+                return m ? m[0] : null;
+        }
+
+        function generate(user_input, uniqueCode) {
+            let qr_code_element = document.querySelector("#qrcode");
+            let downloadBtnDiv = document.querySelector("#downloadBtnDiv");
+            console.log(user_input)
+            var qrcode = new QRCode(qr_code_element, {
+                text: `${user_input}`,
+                width: 150,
+                height: 150,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            let downloadBtn = document.createElement("button");
+            downloadBtn.setAttribute("class", "downloadBtn");
+            downloadBtnDiv.appendChild(downloadBtn);
+
+            let download_link = document.createElement("a");
+            download_link.setAttribute("download", uniqueCode);
+            download_link.setAttribute("class", "downloadlink btn");
+            download_link.innerHTML = `Download QR Code`;
+
+            downloadBtn.appendChild(download_link);
+
+            let qr_code_img = document.querySelector("#qrcode img");
+            let qr_code_canvas = document.querySelector("canvas");
+
+            if (qr_code_img.getAttribute("src") == null) {
+                setTimeout(() => {
+                    download_link.setAttribute("href", `${qr_code_canvas.toDataURL()}`);
+                }, 300);
+            } else {
+                setTimeout(() => {
+                    download_link.setAttribute("href", `${qr_code_img.getAttribute("src")}`);
+                }, 300);
+            }
+        }
+
+    </script>
+
+
+</body>
+
+</html>

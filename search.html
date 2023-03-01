@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title></title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    <style>
+
+    </style>
+</head>
+
+<body style="color:white; background:#6D326D;">
+    <div class="container">
+        <h2>Kid deatils: </h2>
+        <span id="uniqueCode"></span>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            let searchParams = new URLSearchParams(window.location.search);
+            let uniqueCode = searchParams.get('uniqueCode')
+            if (uniqueCode) {
+                document.getElementById("uniqueCode").innerHTML = uniqueCode;
+            }
+        });
+
+    </script>
+</body>
+
+</html>
