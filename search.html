@@ -155,6 +155,8 @@
 
         let searchForm = document.getElementById("searchForm")
         searchForm.addEventListener('submit', (e) => {
+            $("#user_check").hide();
+            $("#error").hide();
             $("#loading").show()
             $("#kidDataContainer").hide()
             console.log("in searchForm")
