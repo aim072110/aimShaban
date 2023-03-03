@@ -10,24 +10,197 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
     <style>
-
+        #user_check,
+        #uniqueCodeFormSubmit {
+            display: none;
+            color: yellow;
+        }
+        #loading{
+            display: none;
+        }
     </style>
 </head>
 
 <body style="color:white; background:#6D326D;">
     <div class="container">
-        <h2>Kid deatils: </h2>
-        <span id="uniqueCode"></span>
+        <h2>Kid details: </h2>
+        <h4 id="user_check"></h4>
+        <h4 id="loading">Loading... <img style="width: 30px;" src="loading.gif"></h4>
+        <div id="uniqueCodeContainer">
+            <form id="uniqueCodeForm">
+                <input type="text" class="form-control" id="uniqueCode" name="uniqueCode" placeholder="uniqueCode"
+                    readonly>
+                <input type="submit" class="btn btn-success col-sm-6 col-xs-12" id="uniqueCodeFormSubmit" name="submit"
+                    value="Submit">
+            </form>
+        </div>
+        <div id="searchContainer">
+            <form id="searchForm">
+                <div class="form-group"><span style="display:none; color:red;" id="more_name_err">First name can't be
+                        more
+                        than 15 letters</span>
+                    <h5>First Name: *</h5>
+                    <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name *" required>
+                </div>
+                <div class="form-group">
+                    <h5>Mobile Number 1: *</h5><span style="display:none; color:red;" id="mn1_err">Please put the
+                        correct
+                        number</span>
+                    <input type="number" class="form-control" id="mn1" name="mn1" placeholder="Mobile Number 1 *"
+                        required>
+                </div>
+                <input type="submit" class="btn btn-success col-sm-6 col-xs-12" id="searchFormSubmit" name="submit"
+                    value="Submit">
+            </form>
+            <br><br>
+        </div>
+        <div id="kidDataContainer">
+            <h4 id="kuniqueCode"></h4>
+            <h4 id="firstName"></h4>
+            <h4 id="fatherName"></h4>
+            <h4 id="surName"></h4>
+            <h4 id="age"></h4>
+            <h4 id="kmn1"></h4>
+            <h4 id="address"></h4>
+            <h4 id="kmn2"></h4>
+            <h4 id="class"></h4>
+            <h4 id="sirName"></h4>
+        </div>
     </div>
-
     <script>
+        var sheetApi = "https://script.google.com/macros/s/AKfycbwi1EPqAWo1i_aE6zDH-MhxqAVOZ7PZTD0YXWerIYRmUoq5cHVUGYKI6XbmWj2pQFYNzA/exec"
         $(document).ready(function () {
             let searchParams = new URLSearchParams(window.location.search);
             let uniqueCode = searchParams.get('uniqueCode')
             if (uniqueCode) {
-                document.getElementById("uniqueCode").innerHTML = uniqueCode;
+                $("#uniqueCodeContainer").show();
+                $("#searchContainer").hide();
+                document.getElementById("uniqueCode").value = uniqueCode;
+                $("#uniqueCodeFormSubmit").click();
+            } else {
+                $("#uniqueCodeContainer").hide();
+                $("#searchContainer").show();
             }
+
+            $("#fname").focusout(function () {
+                fname = $(this).val();
+                if (fname.length > 15) {
+                    $("#more_name_err").show();
+                    $(this).val("");
+                }
+                else {
+                    $("#more_name_err").hide();
+                }
+            });
+
+            $("#mn1").focusout(function () {
+                mn1 = $(this).val().length;
+                if (mn1 == 10) {
+                    $("#mn1_err").hide();
+                }
+                else {
+                    $("#mn1_err").show();
+                    $(this).val("");
+                }
+            });
+
         });
+
+        let uniqueCodeForm = document.getElementById("uniqueCodeForm")
+        uniqueCodeForm.addEventListener('submit', (e) => {
+            $("#loading").show()
+            console.log("in uniqueCodeForm")
+            e.preventDefault();
+            let data = new FormData(uniqueCodeForm);
+            fetch(sheetApi, {
+                method: "POST",
+                body: data
+            })
+                .then(res => res.text())
+                .then(data => {
+                    $("#loading").hide()
+                    console.log(data)
+                    let getData = JSON.parse(data)
+                    if (getData["message"] == "success") {
+                        kidData = getData["data"]["kidData"]
+                        console.log(kidData)
+                        $("#kuniqueCode").text("UniqueCode: " + kidData[0][12])
+                        $("#firstName").text("First Name: " + kidData[0][0])
+                        $("#fatherName").text("Father Name: " + kidData[0][1])
+                        $("#surName").text("Surname: " + kidData[0][2])
+                        $("#age").text("Age: " + kidData[0][4])
+                        $("#kmn1").text("Mno.1: " + kidData[0][5])
+                        $("#address").text("Address: " + kidData[0][7])
+                        $("#kmn2").text("Mno.1: " + kidData[0][8])
+                        $("#class").text("Class:" + kidData[0][10])
+                        $("#sirName").text("Sirname: " + kidData[0][11])
+                    }
+                    else if (getData["message"] == "notFound") {
+                        window.scrollTo(0, 0);
+                        $("#user_check").text("KID HAS NOT REGISTERED, PLEASE REGIESTER");
+                        $("#user_check").show();
+                    }
+                    else if (getData["message"] == "error") {
+                        $("#user_check").text("SOME ERROR OCCURRED TRY AGAIN");
+                        $("#user_check").show();
+                        console.log("try again")
+                    }
+                })
+                .catch(error => {
+                    $("#user_check").text("SOME ERROR OCCURRED TRY AGAIN");
+                    $("#user_check").show();
+                    console.log("try again")
+                });
+        })
+
+        let searchForm = document.getElementById("searchForm")
+        searchForm.addEventListener('submit', (e) => {
+            $("#loading").show()
+            $("#kidDataContainer").hide()
+            console.log("in searchForm")
+            e.preventDefault();
+            let data = new FormData(searchForm);
+            fetch(sheetApi, {
+                method: "POST",
+                body: data
+            })
+                .then(res => res.text())
+                .then(data => {
+                    $("#kidDataContainer").show()
+                    $("#loading").hide()
+                    console.log(data)
+                    let getData = JSON.parse(data)
+                    if (getData["message"] == "success") {
+                        kidData = getData["data"]["kidData"]
+                        console.log(kidData)
+                        $("#kuniqueCode").text("UniqueCode: " + kidData[0][12])
+                        $("#firstName").text("First Name: " + kidData[0][0])
+                        $("#fatherName").text("Father Name: " + kidData[0][1])
+                        $("#surName").text("Surname: " + kidData[0][2])
+                        $("#age").text("Age: " + kidData[0][4])
+                        $("#kmn1").text("Mno.1: " + kidData[0][5])
+                        $("#address").text("Address: " + kidData[0][7])
+                        $("#kmn2").text("Mno.1: " + kidData[0][8])
+                        $("#class").text("Class:" + kidData[0][10])
+                        $("#sirName").text("Sirname: " + kidData[0][11])
+                    }
+                    else if (getData["message"] == "notFound") {
+                        window.scrollTo(0, 0);
+                        $("#user_check").text("KID HAS NOT REGISTERED, PLEASE REGIESTER");
+                        $("#user_check").show();
+                    }
+                    else if (getData["message"] == "error") {
+                        $("#user_check").text("SOME ERROR OCCURRED TRY AGAIN");
+                        $("#user_check").show();
+                        console.log("try again")
+                    }
+                })
+                .catch(error => {
+                    $("#user_check").text("SOME ERROR OCCURRED TRY AGAIN");
+                    $("#user_check").show();
+                    console.log("try again")
+                });
+        })
 
     </script>
 </body>
