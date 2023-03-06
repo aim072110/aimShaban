@@ -15,7 +15,8 @@
             display: none;
             color: yellow;
         }
-        #loading{
+
+        #loading {
             display: none;
         }
     </style>
@@ -55,20 +56,10 @@
             <br><br>
         </div>
         <div id="kidDataContainer">
-            <h4 id="kuniqueCode"></h4>
-            <h4 id="firstName"></h4>
-            <h4 id="fatherName"></h4>
-            <h4 id="surName"></h4>
-            <h4 id="age"></h4>
-            <h4 id="kmn1"></h4>
-            <h4 id="address"></h4>
-            <h4 id="kmn2"></h4>
-            <h4 id="class"></h4>
-            <h4 id="sirName"></h4>
         </div>
     </div>
     <script>
-        var sheetApi = "https://script.google.com/macros/s/AKfycbwi1EPqAWo1i_aE6zDH-MhxqAVOZ7PZTD0YXWerIYRmUoq5cHVUGYKI6XbmWj2pQFYNzA/exec"
+        var sheetApi = "https://script.google.com/macros/s/AKfycbyGtr17cjjtQkBZHZa0TWnni1GtKmnaO1zstwB0k1P37IHvRs3QjiJDEynXJiNZzF9nzQ/exec"
         $(document).ready(function () {
             let searchParams = new URLSearchParams(window.location.search);
             let uniqueCode = searchParams.get('uniqueCode')
@@ -122,18 +113,48 @@
                     console.log(data)
                     let getData = JSON.parse(data)
                     if (getData["message"] == "success") {
+                        $("#kidDataContainer").empty();
+
                         kidData = getData["data"]["kidData"]
                         console.log(kidData)
-                        $("#kuniqueCode").text("UniqueCode: " + kidData[0][12])
-                        $("#firstName").text("First Name: " + kidData[0][0])
-                        $("#fatherName").text("Father Name: " + kidData[0][1])
-                        $("#surName").text("Surname: " + kidData[0][2])
-                        $("#age").text("Age: " + kidData[0][4])
-                        $("#kmn1").text("Mno.1: " + kidData[0][5])
-                        $("#address").text("Address: " + kidData[0][7])
-                        $("#kmn2").text("Mno.1: " + kidData[0][8])
-                        $("#class").text("Class:" + kidData[0][10])
-                        $("#sirName").text("Sirname: " + kidData[0][11])
+
+                        var kidDataMiniContainer = document.createElement("div");
+
+                        let UniqueCode = document.createElement("h4");
+                        UniqueCode.innerHTML = "UniqueCode: " + kidData[0][12];
+
+                        let firstName = document.createElement("h4");
+                        firstName.innerHTML = "First Name: " + kidData[0][0];
+
+                        let fatherName = document.createElement("h4");
+                        fatherName.innerHTML = "Father Name: " + kidData[0][1];
+
+                        let surName = document.createElement("h4");
+                        surName.innerHTML = "Surname: " + kidData[0][2];
+
+                        let age = document.createElement("h4");
+                        age.innerHTML = "Age: " + kidData[0][4];
+
+                        let kmn1 = document.createElement("h4");
+                        kmn1.innerHTML = "Mno.1: " + kidData[0][5];
+
+                        let address = document.createElement("h4");
+                        address.innerHTML = "Address: " + kidData[0][7];
+
+                        let kmn2 = document.createElement("h4");
+                        kmn2.innerHTML = "Mno.1: " + kidData[0][8];
+
+                        let aimClass = document.createElement("h4");
+                        aimClass.innerHTML = "Class: " + kidData[0][10];
+
+                        let sirName = document.createElement("h4");
+                        sirName.innerHTML = "Sir Name: " + kidData[0][11];
+
+                        let hr = document.createElement("hr");
+
+                        kidDataMiniContainer.append(UniqueCode, firstName, fatherName, surName, age, kmn1, address, kmn2, aimClass, sirName, hr)
+
+                        $("#kidDataContainer").append(kidDataMiniContainer);
                     }
                     else if (getData["message"] == "notFound") {
                         window.scrollTo(0, 0);
@@ -170,21 +191,50 @@
                 .then(data => {
                     $("#kidDataContainer").show()
                     $("#loading").hide()
-                    console.log(data)
                     let getData = JSON.parse(data)
                     if (getData["message"] == "success") {
-                        kidData = getData["data"]["kidData"]
-                        console.log(kidData)
-                        $("#kuniqueCode").text("UniqueCode: " + kidData[0][12])
-                        $("#firstName").text("First Name: " + kidData[0][0])
-                        $("#fatherName").text("Father Name: " + kidData[0][1])
-                        $("#surName").text("Surname: " + kidData[0][2])
-                        $("#age").text("Age: " + kidData[0][4])
-                        $("#kmn1").text("Mno.1: " + kidData[0][5])
-                        $("#address").text("Address: " + kidData[0][7])
-                        $("#kmn2").text("Mno.1: " + kidData[0][8])
-                        $("#class").text("Class:" + kidData[0][10])
-                        $("#sirName").text("Sirname: " + kidData[0][11])
+                        $("#kidDataContainer").empty();
+                        let results = getData["data"]["results"]
+                        for (var i = 0; i < results.length; i++) {
+                            console.log(results[i]);
+                            var kidDataMiniContainer = document.createElement("div");
+
+                            let UniqueCode = document.createElement("h4");
+                            UniqueCode.innerHTML = "UniqueCode: " + results[i][12];
+
+                            let firstName = document.createElement("h4");
+                            firstName.innerHTML = "First Name: " + results[i][0];
+
+                            let fatherName = document.createElement("h4");
+                            fatherName.innerHTML = "Father Name: " + results[i][1];
+
+                            let surName = document.createElement("h4");
+                            surName.innerHTML = "Surname: " + results[i][2];
+
+                            let age = document.createElement("h4");
+                            age.innerHTML = "Age: " + results[i][4];
+
+                            let kmn1 = document.createElement("h4");
+                            kmn1.innerHTML = "Mno.1: " + results[i][5];
+
+                            let address = document.createElement("h4");
+                            address.innerHTML = "Address: " + results[i][7];
+
+                            let kmn2 = document.createElement("h4");
+                            kmn2.innerHTML = "Mno.1: " + results[i][8];
+
+                            let aimClass = document.createElement("h4");
+                            aimClass.innerHTML = "Class: " + results[i][10];
+
+                            let sirName = document.createElement("h4");
+                            sirName.innerHTML = "Sir Name: " + results[i][11];
+
+                            let hr = document.createElement("hr");
+
+                            kidDataMiniContainer.append(UniqueCode, firstName, fatherName, surName, age, kmn1, address, kmn2, aimClass, sirName, hr)
+
+                            $("#kidDataContainer").append(kidDataMiniContainer);
+                        }
                     }
                     else if (getData["message"] == "notFound") {
                         window.scrollTo(0, 0);
