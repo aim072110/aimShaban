@@ -43,12 +43,19 @@
                     <h5>First Name: *</h5>
                     <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name *">
                 </div>
+                
                 <div class="form-group">
                     <h5>Mobile Number 1: *</h5><span style="display:none; color:red;" id="mn1_err">Please put the
                         correct
                         number</span>
                     <input type="number" class="form-control" id="mn1" name="mn1" placeholder="Mobile Number 1 *">
                 </div>
+
+                <div class="form-group">
+                    <h5>UniqueCode</h5>
+                    <input type="text" class="form-control" id="runiqueCode" name="runiqueCode" placeholder="uniqueCode">
+                </div>
+
                 <input type="submit" class="btn btn-success col-sm-6 col-xs-12" id="searchFormSubmit" name="submit"
                     value="Submit">
             </form>
@@ -58,7 +65,7 @@
         </div>
     </div>
     <script>
-        var sheetApi = "https://script.google.com/macros/s/AKfycbyGtr17cjjtQkBZHZa0TWnni1GtKmnaO1zstwB0k1P37IHvRs3QjiJDEynXJiNZzF9nzQ/exec"
+        var sheetApi = "https://script.google.com/macros/s/AKfycbxTBEBzxnd5y6V0vp2Ta7sBui7hrI5VZ__fH4IDg9w0RVw3DHtYVpnpi0awWIwH9HnQVA/exec"
         $(document).ready(function () {
             let searchParams = new URLSearchParams(window.location.search);
             let uniqueCode = searchParams.get('uniqueCode')
@@ -72,27 +79,27 @@
                 $("#searchContainer").show();
             }
 
-            $("#fname").focusout(function () {
-                fname = $(this).val();
-                if (fname.length > 15) {
-                    $("#more_name_err").show();
-                    $(this).val("");
-                }
-                else {
-                    $("#more_name_err").hide();
-                }
-            });
+//             $("#fname").focusout(function () {
+//                 fname = $(this).val();
+//                 if (fname.length > 15) {
+//                     $("#more_name_err").show();
+//                     $(this).val("");
+//                 }
+//                 else {
+//                     $("#more_name_err").hide();
+//                 }
+//             });
 
-            $("#mn1").focusout(function () {
-                mn1 = $(this).val().length;
-                if (mn1 == 10) {
-                    $("#mn1_err").hide();
-                }
-                else {
-                    $("#mn1_err").show();
-                    $(this).val("");
-                }
-            });
+//             $("#mn1").focusout(function () {
+//                 mn1 = $(this).val().length;
+//                 if (mn1 == 10) {
+//                     $("#mn1_err").hide();
+//                 }
+//                 else {
+//                     $("#mn1_err").show();
+//                     $(this).val("");
+//                 }
+//             });
 
         });
 
